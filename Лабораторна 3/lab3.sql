@@ -50,8 +50,8 @@ ALTER TABLE pm_system.task
 ALTER TABLE pm_system.user_department
     DROP FOREIGN KEY fk_department_user_department;
 ALTER TABLE pm_system.user_department
-    ADD CONSTRAINT fk_department_user_department FOREIGN KEY (id_user)
-    REFERENCES pm_system.user (id_user) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_department_user_department FOREIGN KEY(id_department)
+        REFERENCES  PM_System.department(id_department) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 ALTER TABLE pm_system.user_department
     DROP FOREIGN KEY fk_user_user_department;
