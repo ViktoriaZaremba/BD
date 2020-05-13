@@ -95,7 +95,7 @@ CREATE TABLE PM_System.investor(
 CREATE TABLE PM_System.budget_investor(
     id_budget INT UNSIGNED NOT NULL,
     id_investor INT UNSIGNED NOT NULL,
-    sum FLOAT NOT NULL;
+    sum FLOAT NOT NULL,
     PRIMARY KEY (id_investor, id_budget),
     CONSTRAINT bud_inv FOREIGN KEY (id_budget)
         REFERENCES PM_System.budget(id_budget) ON DELETE NO ACTION ON UPDATE NO ACTION,

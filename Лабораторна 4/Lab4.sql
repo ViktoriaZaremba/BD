@@ -4,6 +4,9 @@ USE pm_system;
 
 DESCRIBE user;
 
+ALTER TABLE pm_system.user
+MODIFY phone_number varchar(13) NOT NULL ;
+
 INSERT INTO user VALUES (1, 'Zaremba', 'Viktoria', 'vika241020@gmail.com', '+380985796738', '12345678');
 
 INSERT INTO user
@@ -23,21 +26,30 @@ SELECT * FROM user;
 
 DESCRIBE project;
 
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\project.csv'
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\project_.csv'
     INTO TABLE project
     CHARACTER SET CP1251
     FIELDS TERMINATED BY ';'
-    LINES TERMINATED BY '\n';
+    LINES TERMINATED BY '\n'
+    (name, date, active, purpose, place,target_audience)
+    SET id_project = NULL;
 
 SELECT * FROM project;
 
+ALTER TABLE investor
+MODIFY contact_phone varchar(13);
+ALTER TABLE investor
+MODIFY contact_mail varchar(50);
+
 DESCRIBE investor;
 
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\investors.csv'
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\investor.csv'
     INTO TABLE investor
     CHARACTER SET CP1251
     FIELDS TERMINATED BY ';'
-    LINES TERMINATED BY '\n';
+    LINES TERMINATED BY '\n'
+    (name, type, contact_person, contact_phone, contact_mail)
+    SET id_investor = NULL;
 
 SELECT * FROM investor;
 
@@ -47,29 +59,62 @@ LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\department.
     INTO TABLE department
     CHARACTER SET CP1251
     FIELDS TERMINATED BY ';'
-    LINES TERMINATED BY '\n';
+    LINES TERMINATED BY '\n'
+    (name, id_project)
+    SET id_department = NULL;
 
 DESCRIBE user_department;
+
+SELECT * FROM project;
+SELECT * FROM user;
+SELECT * FROM department;
 
 LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\user_department.csv'
     INTO TABLE user_department
     CHARACTER SET CP1251
     FIELDS TERMINATED BY ';'
-    LINES TERMINATED BY '\n';
+    LINES TERMINATED BY '\n'
+    (position, id_user, id_department)
+    SET id_user_department = NULL;
 
 SELECT * FROM user_department;
+SELECT * FROM department;
 
 DESCRIBE task;
+
+ALTER TABLE task
+DROP id_version;
+
+UPDATE pm_system.project
+SET date = '2020-07-07'
+WHERE id_project = 25;
+
+ALTER TABLE pm_system.task
+    MODIFY deadline DATE DEFAULT NULL;
+ALTER TABLE pm_system.task
+    MODIFY start DATE DEFAULT NULL;
+ALTER TABLE pm_system.task
+MODIFY status tinyint(1) DEFAULT 1;
 
 LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\task.csv'
     INTO TABLE task
     CHARACTER SET CP1251
     FIELDS TERMINATED BY ';'
     LINES TERMINATED BY '\n'
-    (name,deadline,id_department)
+    (name,details,deadline,comment, priority, id_department, start, status)
     SET id_task=NULL;
 
+SELECT * FROM task;
+
 DESCRIBE task_user_department;
+
+ALTER TABLE task_user_department
+DROP COLUMN start_data;
+
+SELECT * FROM task;
+SELECT * FROM user_department;
+SELECT * FROM user;
+SELECT * FROM department;
 
 LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\task_user_department.csv'
     INTO TABLE task_user_department
@@ -79,24 +124,38 @@ LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\task_user_d
     (id_user_department, id_task)
     SET id_task_user_department=NULL;
 
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\budget.cvs'
+DESCRIBE budget;
+
+ALTER TABLE budget
+MODIFY price FLOAT UNSIGNED NOT NULL ;
+
+SELECT * FROM investor;
+
+INSERT INTO investor VALUES (4, 'вкладка учасників', 'вкладка', 'учасники', '-','-');
+INSERT INTO investor VALUES (5, 'інше', 'інше', 'інше', '-','-');
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\budget.csv'
     INTO TABLE budget
     CHARACTER SET CP1251
     FIELDS TERMINATED BY ';'
     LINES TERMINATED BY '\n'
-    (cost_item,price,number,id_project)
+    (cost_type,cost_item,price,number,id_project)
     SET id_budget=NULL;
 
 SELECT * FROM budget;
+SELECT * FROM investor;
 
 DESCRIBE budget_investor;
 
-LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\budget_investor.cvs'
+ALTER TABLE budget_investor
+MODIFY sum FLOAT UNSIGNED;
+
+LOAD DATA INFILE 'C:\\ProgramData\\MySQL\\MySQL Server 8.0\\Uploads\\budget_investor.csv'
     INTO TABLE budget_investor
     CHARACTER SET CP1251
-    FIELDS TERMINATED BY ';'
-    LINES TERMINATED BY '\n'
-    (id_budget,id_investor);
+    FIELDS TERMINATED BY';'
+    LINES TERMINATED BY '\r\n'
+    (id_budget,id_investor, sum);
 
 SELECT * FROM budget_investor;
 DESCRIBE project;

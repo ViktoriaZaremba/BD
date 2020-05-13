@@ -1,15 +1,16 @@
+USE pm_system;
 SHOW TABLES;    #Показує таблиці БД
-DESCRIBE project;   #Деталі конкретної таблиці
+DESCRIBE task_user_department;   #Деталі конкретної таблиці
 
 ALTER TABLE pm_system.task_user_department
-    DROP FOREIGN KEY fk_tud_ud,
-    DROP INDEX fk_tud_ud;
+    DROP FOREIGN KEY tud_ud,
+    DROP INDEX tud_ud;
 
 SHOW INDEX FROM pm_system.task_user_department;
 SHOW CREATE TABLE pm_system.task_user_department;
 
 ALTER TABLE pm_system.task_user_department
-    ADD CONSTRAINT fk_tud_ud FOREIGN KEY(id_user_department)
+    ADD CONSTRAINT tud_ud FOREIGN KEY(id_user_department)
         REFERENCES PM_System.user_department(id_user_department) ON UPDATE NO ACTION ON DELETE NO ACTION;
 
 DESCRIBE pm_system.task;
@@ -29,7 +30,7 @@ ALTER TABLE pm_system.user
 DESCRIBE pm_system.task;
 
 ALTER TABLE pm_system.task
-    MODIFY priority ENUM ('low', 'high', 'medium') DEFAULT 'medium',
+    MODIFY priority VARCHAR(30) DEFAULT 'medium',
     ADD COLUMN id_version TINYINT(8) UNSIGNED NOT NULL  AFTER id_task,
     ADD CONSTRAINT UNIQUE OQ_task_version (id_task, id_version);
 
@@ -42,39 +43,39 @@ ALTER TABLE pm_system.department
     REFERENCES pm_system.project (id_project) ON DELETE CASCADE;
 
 ALTER TABLE pm_system.task
-    DROP FOREIGN KEY fk_task_department;
+    DROP FOREIGN KEY task_department;
 ALTER TABLE pm_system.task
-    ADD CONSTRAINT fk_task_department FOREIGN KEY (id_department)
+    ADD CONSTRAINT task_department FOREIGN KEY (id_department)
     REFERENCES pm_system.department (id_department) ON DELETE CASCADE;
 
 ALTER TABLE pm_system.user_department
-    DROP FOREIGN KEY fk_department_user_department;
+    DROP FOREIGN KEY department_user_department;
 ALTER TABLE pm_system.user_department
-    ADD CONSTRAINT fk_department_user_department FOREIGN KEY(id_department)
+    ADD CONSTRAINT department_user_department FOREIGN KEY(id_department)
         REFERENCES  PM_System.department(id_department) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 ALTER TABLE pm_system.user_department
-    DROP FOREIGN KEY fk_user_user_department;
+    DROP FOREIGN KEY user_user_department;
 ALTER TABLE pm_system.user_department
-    ADD CONSTRAINT fk_user_user_department FOREIGN KEY(id_user)
+    ADD CONSTRAINT user_user_department FOREIGN KEY(id_user)
         REFERENCES PM_System.user(id_user)  ON DELETE CASCADE;
 
 ALTER TABLE pm_system.user_department
-    DROP FOREIGN KEY fk_department_user_department;
+    DROP FOREIGN KEY department_user_department;
 ALTER TABLE pm_system.user_department
-    ADD CONSTRAINT fk_department_user_department FOREIGN KEY(id_department)
+    ADD CONSTRAINT department_user_department FOREIGN KEY(id_department)
         REFERENCES  PM_System.department(id_department) ON DELETE CASCADE;
 
 ALTER TABLE pm_system.task_user_department
-    DROP FOREIGN KEY fk_tud_ud;
+    DROP FOREIGN KEY tud_ud;
 ALTER TABLE pm_system.task_user_department
-    ADD CONSTRAINT fk_tud_ud FOREIGN KEY(id_user_department)
+    ADD CONSTRAINT tud_ud FOREIGN KEY(id_user_department)
         REFERENCES PM_System.user_department(id_user_department) ON DELETE CASCADE;
 
 ALTER TABLE pm_system.task_user_department
-    DROP FOREIGN KEY fk_tud_task;
+    DROP FOREIGN KEY tud_task;
 ALTER TABLE pm_system.task_user_department
-    ADD CONSTRAINT fk_tud_task FOREIGN KEY(id_task)
+    ADD CONSTRAINT tud_task FOREIGN KEY(id_task)
         REFERENCES  PM_System.task(id_task) ON DELETE CASCADE;
 
 
