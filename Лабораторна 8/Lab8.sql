@@ -1,4 +1,6 @@
-SELECT name,deadline FROM task
+USE pm_system;
+
+SELECT task_name, deadline FROM task
 WHERE status = 1
 ORDER BY deadline
 LIMIT 3;
